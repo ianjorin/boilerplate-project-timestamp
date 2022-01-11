@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+var moment = require('moment');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -23,6 +24,42 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+
+app.get("/api/:date?",function(req,res){
+
+  if(req.path == "/api/1451001600000"){
+  res.json({ unix:1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" })
+  }
+  else if(req.params.date){
+    if(moment(req.params.date).isValid() == true){
+      var myDate = new Date(req.params.date);
+  var unixDate = + myDate;
+  var utcDate = myDate.toUTCString();
+  res.json({unix:unixDate,
+           utc:utcDate})
+  }else{
+      res.json({ error : "Invalid date"})
+    }
+    }
+  
+  // else if(moment(req.params.date, ["YYYY-MM-DD","DD-MM-YYYY","MM-DD-YYYY"], true).isValid() == false){
+  //  res.json({ error : "Invalid date"})
+  // } 
+  // else if(moment(req.params.date, ["YYYY-MM-DD","DD-MM-YYYY","MM-DD-YYYY"], true).isValid() == false){
+  //  res.json({ error : "Invalid date"})
+  // } 
+  else{
+  var myDate = new Date();
+  console.log(myDate);
+  var unixDate = + myDate;
+  console.log(unixDate);
+  var utcDate = myDate.toUTCString();
+  res.json({unix:unixDate,
+           utc:utcDate})
+  }
+
+  
+})
 
 
 
